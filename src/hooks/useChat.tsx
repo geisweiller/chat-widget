@@ -4,7 +4,7 @@ import { Avatar } from "../components";
 import { ChatMessage, ChatMyMessage } from "../features";
 import { useWebLLM } from "./useWebLLM";
 
-export function useChat() {
+export function useChat(maintenance = false) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const { ask, modelLoading, replyLoading } = useWebLLM();
@@ -27,10 +27,14 @@ export function useChat() {
   }, []);
 
   useEffect(() => {
-    if (open) {
+    if (!open) {
+      return;
+    }
+
+    if (maintenance) {
       setMessages([
         <ChatMessage
-          key="intro-1"
+          key="maintenance"
           avatar={
             <Avatar
               active="inactive"
@@ -40,32 +44,63 @@ export function useChat() {
             />
           }
         >
-          ☕ Please wait while I grab a coffee… I’ll be ready shortly.
+          🚧 The service is currently under maintenance. Please try again later.
         </ChatMessage>,
       ]);
+      return;
     }
-  }, [open]);
+
+    setMessages([
+      <ChatMessage
+        key="intro-1"
+        avatar={
+          <Avatar
+            active="inactive"
+            badge={{
+              status: "away",
+            }}
+          />
+        }
+      >
+        ☕ Please wait while I grab a coffee… I’ll be ready shortly.
+      </ChatMessage>,
+    ]);
+  }, [open, maintenance]);
 
   useEffect(() => {
-    if (!modelLoading && open) {
-      setMessages((prev) => [
-        ...prev,
-        <ChatMessage key="intro-ready" avatar={<Avatar />}>
-          🎉 I’m ready! How can I help you today?
-        </ChatMessage>,
-      ]);
+    if (!open || maintenance) {
+      return;
     }
-  }, [modelLoading, open]);
+    if (modelLoading) {
+      return;
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      <ChatMessage key="intro-ready" avatar={<Avatar />}>
+        🎉 I’m ready! How can I help you today?
+      </ChatMessage>,
+    ]);
+  }, [modelLoading, open, maintenance]);
 
   const handleSend = async () => {
-    if (!value.trim()) return;
+    if (!value.trim()) {
+      return;
+    }
 
     const myText = value;
     addMyMessage(myText);
     setValue("");
 
+    if (maintenance) {
+      addAIMessage(
+        "🚧 Sorry, I can’t respond right now. The service is under maintenance.",
+      );
+      return;
+    }
+
     if (modelLoading) {
-      addAIMessage("⚙️ Still warming up the AI brain… please wait!");
+      addAIMessage("⚙️ Still warming up… hang tight!");
       return;
     }
 

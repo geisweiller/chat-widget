@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "allowImportingTsExtensions": true,
+    "outDir": "./types", 
+  },
+  "include": ["src/index.ts", "src/ChatWidget.tsx", "src/features/**/*", "src/components/**/*", "src/hooks/**/*", "src/theme/**/*"],
+  "exclude": ["src/main.ts", "**/*.spec.ts", "**/*.spec.tsx", "**/__tests__/**/*"]
+}

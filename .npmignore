@@ -1,0 +1,38 @@
+# --- Source files not published ---
+src/
+public/
+vite.config.ts
+tsconfig.json
+tsconfig.*.json
+jest.config.js
+babel.config.js
+
+# --- Tests ---
+**/*.spec.ts
+**/*.spec.tsx
+**/*.test.ts
+**/*.test.tsx
+coverage/
+__tests__/
+
+# --- Development artifacts ---
+*.log
+*.tsbuildinfo
+*.tsbuildinfo.*
+.yarn/
+.pnp.*
+npm-debug.log*
+yarn-error.log*
+
+# --- Node & environment ---
+node_modules/
+.tmp/
+.DS_Store
+
+# --- Build artifacts we don't want ---
+dist/**/*.map
+
+# --- IDE / tooling ---
+.vscode/
+.idea/
+*.swp

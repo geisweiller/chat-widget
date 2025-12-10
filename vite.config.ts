@@ -1,12 +1,23 @@
-import path, { resolve } from "path";
+import path from "path";
 
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
   plugins: [
-    react({
-      include: ["src/**/*.tsx"],
+    react(),
+    dts({
+      entryRoot: "src/types",
+      outDir: "dist",
+      copyDtsFiles: true,
+      insertTypesEntry: true,
+      exclude: [
+        "**/*.spec.*",
+        "**/__tests__/**",
+        "src/main.ts",
+        "src/main.tsx",
+      ],
     }),
   ],
   resolve: {
@@ -15,13 +26,23 @@ export default defineConfig({
     },
   },
   build: {
+    minify: "esbuild",
+    sourcemap: false,
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: "src/index.ts",
       name: "ChatWidget",
       fileName: (format) => `chat-widget.${format}.js`,
+      formats: ["es", "umd"],
     },
     rollupOptions: {
-      external: ["react", "react-dom", "@fluentui/react-components"],
+      external: [
+        "react",
+        "react-dom",
+        "@fluentui/react-components",
+        "@fluentui-contrib/react-chat",
+        "@fluentui-contrib/react-draggable-dialog",
+        "@mlc-ai/web-llm",
+      ],
       output: {
         globals: {
           react: "React",

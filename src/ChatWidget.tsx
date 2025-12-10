@@ -1,55 +1,23 @@
-import type { DraggableDialogPosition } from "@fluentui-contrib/react-draggable-dialog";
+import { FluentProvider } from "@fluentui/react-components";
 
-import { EmbeddedChatButton, type EmbeddedChatButtonProps } from "./components";
-import { ChatDialog } from "./features";
-import { ChatResponseLoader } from "./features/Chat";
-import { useChat } from "./hooks";
+import { Widget, type WidgetProps } from "./features/Widget/Widget";
+import { useTheme } from "./hooks";
+import { useGlobalStyles } from "./theme";
 
-export interface ChatWidgetProps {
-  title?: string;
-  placeholder?: string;
-  maintenance?: boolean;
-  disabled?: boolean;
-  position?: DraggableDialogPosition;
-  buttonPosition?: EmbeddedChatButtonProps["position"];
+export interface ChatWidgetProps extends WidgetProps {
+  theme?: "light" | "dark";
 }
 
 export function ChatWidget({
-  title = "Chat AI",
-  placeholder = "Type a message",
-  maintenance = false,
-  disabled = false,
-  position,
-  buttonPosition,
+  theme: themeMode = "light",
+  ...props
 }: ChatWidgetProps) {
-  const placeholderText = maintenance ? "Service in maintenance…" : placeholder;
-  const {
-    open,
-    setOpen,
-    value,
-    setValue,
-    messages,
-    handleSend,
-    modelLoading,
-    replyLoading,
-  } = useChat();
+  const theme = useTheme(themeMode);
+  useGlobalStyles();
 
   return (
-    <ChatDialog
-      title={title}
-      open={open}
-      trigger={<EmbeddedChatButton position={buttonPosition} />}
-      maintenance={maintenance}
-      position={position}
-      onOpenChange={(_, data) => setOpen(data.open)}
-      placeholder={placeholderText}
-      disabled={disabled || modelLoading}
-      value={value}
-      onChange={(_, data) => setValue(data.value)}
-      onSend={handleSend}
-    >
-      {messages}
-      {replyLoading ? <ChatResponseLoader /> : null}
-    </ChatDialog>
+    <FluentProvider theme={theme}>
+      <Widget {...props} />
+    </FluentProvider>
   );
 }

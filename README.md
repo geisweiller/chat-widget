@@ -1,73 +1,124 @@
-# React + TypeScript + Vite
+# Geisweiller Chat Widget
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A customizable, Fluent UI–based AI chat widget for React applications.  
+Supports light/dark themes, persistent chat history, maintenance mode, draggable UI, and pluggable AI engines (WebLLM, OpenAI, etc.).
 
-Currently, two official plugins are available:
+Built with:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 18
+- Fluent UI v9
+- Vite Library Mode
+- Optional WebLLM local inference
 
-## React Compiler
+This widget can be used as a support chat, AI assistant, embedded chat bubble, or custom chatbot interface.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### npm
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm install @geisweiller/chat-widget
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### yarn
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+yarn add @geisweiller/chat-widget
 ```
+
+### pnpm
+
+```sh
+pnpm add @geisweiller/chat-widget
+```
+
+---
+
+## Basic Usage
+
+```tsx
+import { ChatWidget } from "@geisweiller/chat-widget";
+
+export function App() {
+  return (
+    <ChatWidget
+      theme="light"
+      title="Chat Widget"
+      placeholder="Ask me anything..."
+    />
+  );
+}
+```
+
+---
+
+## Props
+
+# Chat Widget – Props Reference
+
+## `<ChatWidget />` Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| **title** | `string` | `"Chat"` | The dialog title displayed at the top of the chat window. |
+| **placeholder** | `string` | `"Type a message…”` | Placeholder text for the chat input field. |
+| **maintenance** | `boolean` | `false` | Enables maintenance mode. When `true`, the widget shows a maintenance banner, disables sending, and updates intro/response messages accordingly. |
+| **disabled** | `boolean` | `false` | Disables the input and prevents message sending. |
+| **position** | `DraggableDialogPosition` | `{ x: 0, y: 0 }` | Initial position of the draggable chat dialog. |
+| **embeddedButtonProps** | `EmbeddedChatButtonProps` | required | Props passed to the floating chat button that opens the widget. |
+
+---
+
+## `EmbeddedChatButtonProps`
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| **position** | `"left" \| "right"` | `"right"` | Position of the floating chat button on the screen. |
+| **label** | `string` | `"Open Chat"` | Text displayed inside the button. |
+| **onClick** | `() => void` | — | Callback fired when the button is clicked. |
+| **icon** | `React.ComponentType` | `ChatFilled` | Optional custom icon component. |
+| **appearance** | `"primary" \| "secondary" \| ..."` | `"primary"` | Fluent UI button appearance. |
+
+---
+
+## CDN Usage (Optional)
+
+```html
+<script src="https://unpkg.com/eloquent-chat-widget/dist/eloquent-chat-widget.umd.js"></script>
+
+<div id="chat-root"></div>
+
+<script>
+  ChatWidget.mount("#chat-root", {
+    theme: "light",
+    title: "Chat Widget"
+  });
+</script>
+```
+
+---
+
+## Development
+
+```sh
+npm run build
+npm test
+npm run lint
+```
+
+---
+
+## Publishing
+
+```sh
+npm login
+npm publish --access public
+```
+
+---
+
+## License
+
+MIT License
