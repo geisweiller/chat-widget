@@ -36,12 +36,19 @@ export function Widget({
     modelLoading,
     replyLoading,
   } = useChat(maintenance);
+  const { label, onClick, position: buttonPosition } = embeddedButtonProps;
 
   return (
     <ChatDialog
       title={title}
       open={open}
-      trigger={<EmbeddedChatButton {...embeddedButtonProps} />}
+      trigger={
+        <EmbeddedChatButton
+          label={label}
+          position={buttonPosition}
+          onClick={onClick}
+        />
+      }
       maintenance={maintenance}
       position={position}
       onOpenChange={(_, data) => setOpen(data.open)}
