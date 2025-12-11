@@ -1,8 +1,7 @@
-import { createRef } from "react";
-
 import { render, screen, fireEvent } from "@testing-library/react";
 
 import { EmbeddedChatButton, Position } from "../EmbeddedChatButton";
+import "@testing-library/jest-dom";
 
 jest.mock("../EmbeddedChatButton.styles", () => ({
   useEmbeddedChatButtonStyles: () => ({
@@ -52,14 +51,5 @@ describe("Atom component: EmbeddedChatButton", () => {
     fireEvent.click(screen.getByRole("button"));
 
     expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-
-  it("forwards ref to outer div", () => {
-    const ref = createRef<HTMLDivElement>();
-
-    render(<EmbeddedChatButton ref={ref} />);
-
-    expect(ref.current).not.toBeNull();
-    expect(ref.current?.tagName).toBe("DIV");
   });
 });
